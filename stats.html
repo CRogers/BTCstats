@@ -1,0 +1,54 @@
+<html>
+
+<head>
+  <title>Bitcoin Stats</title>
+  <script type="text/javascript" src="../lib/jquery/jquery-1.4.2.min.js"></script>
+  <script type="text/javascript" src="../lib/flot/jquery.flot.min.js"></script>
+  
+  <script type="text/javascript" charset="utf-8">
+    var stats_url = '../json_proxy.php?url=http://mining.bitcoin.cz/stats/json/';
+    var datasets = {};
+    
+    function makeTable()
+    {
+      var items = {ghashes_ps: 'Hashes per Second', active_workers: 'Connected Workers'};
+      
+      $.each(items, function(k,v){
+        $('#stats_table').append('<tr><td>' + v + '</td><td id="' + k + '"></td><td><div class="graph" id="' + k + '_graph"></div></td></tr>');
+        datasets[k] = [];
+      });
+    }
+  
+    function update()
+    {
+      $.getJSON(stats_url, function(data){
+        $.each(data, function(k,v){
+          if(datasets[k] != undefined){
+            $('#'+k).text(v);
+            datasets[k].push([new Date().getTime(), parseFloat(v)]);
+            $.plot($('#'+k+'_graph'), [datasets[k]], {xaxis: {mode: 'time'}});
+          }
+        });
+      });
+    }
+    
+    $(document).ready(function(){
+      makeTable();
+      setInterval(update,2000);
+    });
+  </script>
+  
+  <style type="text/css">
+    .graph{
+      width: 400px;
+      height: 100px;
+    }
+  </style>
+</head>
+
+<body>
+  <table cellspacing="5" cellpadding="5" id="stats_table">
+  </table>
+</body>
+
+</html>
