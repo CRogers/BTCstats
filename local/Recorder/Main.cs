@@ -8,11 +8,12 @@ namespace Recorder
 	class MainClass
 	{
 		public static void Main (string[] args)
-		{
-			GetTemps();
-			
+		{			
 			foreach(double t in GetTemps())
 				Console.WriteLine(t);
+			
+			foreach(double[] t in GetCurrentClocks())
+				Console.WriteLine(t[0] + "   " + t[1]);
 		}
 		
 		public static IEnumerable<double> GetTemps()
@@ -22,6 +23,15 @@ namespace Recorder
 			
 			foreach(Match m in r.Matches(text))
 				yield return double.Parse(m.Groups["temp"].Value);
+		}
+		
+		public static IEnumerable<double[]> GetCurrentClocks()
+		{
+			var text = ReadProcess("aticonfig", "--odgc --adapter=all");
+			var cc = new Regex(@"Current Clocks : *(?<core>\d{2,4}) *(?<mem>\d{2,4})");
+			
+			foreach(Match m in cc.Matches(text))
+				yield return new[]{ double.Parse(m.Groups["core"].Value), double.Parse(m.Groups["mem"].Value) };
 		}
 		
 		public static string ReadProcess(string program, string args)
