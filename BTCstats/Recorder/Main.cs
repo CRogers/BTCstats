@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 
 namespace Recorder
 {
@@ -6,11 +7,15 @@ namespace Recorder
 	{
         public static void Main(string[] args)
         {
-            foreach (double t in CardStats.GetTemps())
+            string apiKey = File.ReadAllText("apiKey.txt");
+            var scraper = new SlushScraper(apiKey);
+            var data = scraper.ReadApiData();
+
+            /*foreach (double t in CardStats.GetTemps())
                 Console.WriteLine(t);
 
             foreach (double[] t in CardStats.GetCurrentClocks())
-                Console.WriteLine(t[0] + "   " + t[1]);
+                Console.WriteLine(t[0] + "   " + t[1]);*/
         }
 	}
 }
