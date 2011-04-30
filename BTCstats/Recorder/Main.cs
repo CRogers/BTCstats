@@ -11,6 +11,8 @@ namespace Recorder
             var scraper = new SlushScraper(apiKey);
             var data = scraper.ReadApiData();
 
+            var pstats = SlushScraper.ReadPublicStats();
+
             /*foreach (double t in CardStats.GetTemps())
                 Console.WriteLine(t);
 

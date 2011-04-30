@@ -19,11 +19,20 @@ namespace Recorder
 
         public static ApiData ReadApiData(string apiKey)
         {
-            var wc = new WebClient();
-            var json = wc.DownloadString("http://mining.bitcoin.cz/accounts/profile/json/" + apiKey);
+            return DeserializeJson<ApiData>("http://mining.bitcoin.cz/accounts/profile/json/" + apiKey);
+        }
 
-            var serializer = new JsonExSerializer.Serializer(typeof (ApiData));
-            return (ApiData)serializer.Deserialize(json);
+        public static PublicStats ReadPublicStats()
+        {
+            return DeserializeJson<PublicStats>("http://mining.bitcoin.cz/stats/json/");
+        }
+
+        private static T DeserializeJson<T>(string url)
+        {
+            var json = new WebClient().DownloadString(url);
+
+            var serializer = new JsonExSerializer.Serializer(typeof(T));
+            return (T)serializer.Deserialize(json);
         }
     }
 }

@@ -52,6 +52,7 @@
     <Compile Include="CardStats.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="PublicStats.cs" />
     <Compile Include="SlushScraper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
